@@ -55,6 +55,14 @@ class BusinessSeeder extends Seeder
                 'latitude' => $faker->latitude,
                 'longitude' => $faker->longitude,
             ]);
+
+            $transactionTypes = ['pickup', 'delivery'];
+            $transactionType = $faker->randomElement($transactionTypes);
+
+            DB::table('transactions')->insert([
+                'business_id' => $businessId,
+                'transaction_type' => $transactionType,
+            ]);
         }
     }
 }
