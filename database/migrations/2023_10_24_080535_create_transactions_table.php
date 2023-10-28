@@ -12,10 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->increments('id');
             $table->string('business_id');
             $table->string('transaction_type');
-            $table->timestamps();
 
             $table->foreign('business_id')
                 ->references('id')

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\BusinessController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'v1'], function () {
+
+    // Get Search business
+    Route::get('/business/search', [BusinessController::class, 'search']);
+
+
+    // Get a single business
+    Route::get('/business/{id}', [BusinessController::class, 'show']);
+
+    // Create a new business
+    Route::post('/business', [BusinessController::class, 'store']);
+
+    // Update a business
+    Route::put('/business/{id}', [BusinessController::class, 'update']);
+
+    // Delete a business
+    Route::delete('/business/{id}', [BusinessController::class, 'destroy']);
 });
