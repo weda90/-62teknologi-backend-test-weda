@@ -220,6 +220,14 @@ class BusinessController extends Controller
             ->limit($limit)
             ->get();
 
+        // Convert transactions to array of values
+        $business->transform(function ($item, $key) {
+            $transactions =  $item->transactions->pluck('transaction_type')->toArray();
+            $item->setRelation('transactions', $transactions);
+            $item->transactions = $transactions;
+            return $item;
+        });
+
         $responses = [
             "business" => $business,
             "total" => count($business)
