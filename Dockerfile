@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y \
   ca-certificates \
   software-properties-common
 
-
 # Install PHP only if PHP_VERSION is specified
 RUN if [ -n "$PHP_VERSION" ]; then \
         add-apt-repository ppa:ondrej/php && \
@@ -39,32 +38,27 @@ RUN if [ -n "$PHP_VERSION" ]; then \
         alias artisan='php artisan'; \
     fi
 
-
 # Install packages specific to PostgreSQL or MySQL based on the DATABASE_DRIVER argument
-RUN apt-get install -y postgresql libpq-dev \
-        docker-php-ext-install pgsql pdo_pgsql 
-
+RUN apt-get install -y postgresql libpq-dev
+RUN docker-php-ext-install pgsql pdo_pgsql 
 
 # Install Composer with the specified version
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer 
 
-
 # Extension
-RUN apt-get -y install libonig-dev
+RUN apt-get -y install libonig-dev libzip-dev
 
 RUN rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install zip
-
-RUN composer install --no-scripts --no-autoloader --no-dev --ignore-platform-reqs
-
-RUN mkdir /run/php
 
 # Set the working directory
 WORKDIR /var/www/html
 
 # Copy your application code to the container
 COPY . .
+
+RUN composer install --no-scripts --no-autoloader --no-dev --ignore-platform-reqs
 
 # Expose any necessary ports
 EXPOSE 9000
